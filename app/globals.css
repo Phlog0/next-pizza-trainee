@@ -4,6 +4,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+  html {
+    scroll-behavior: smooth;
+  }
+
 /*  FROM TAILWIND 3 TO 4 https://ui.shadcn.com/docs/tailwind-v4*/
 :root {
   --background: hsl(0 0% 100%);
