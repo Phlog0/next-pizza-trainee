@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
+  // output   = "../lib/generated/prisma"
 }
 
 datasource db {
@@ -14,19 +14,180 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  fullname  String
-  email     String
-  password  String
+// Пицца-Комбо-Закуски-Коктейли-Кофе-Напитки-Десерты
+model Category {
+  id       Int       @id @default(autoincrement())
+  title    String    @unique
+  products Product[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+//Продукт (отдельный продукт)
+// 1. пицца-пеперони
+// 2. Свинячие нагетсы
+// 3. Сок вкусный
 model Product {
-  id        Int      @id @default(autoincrement())
-  name      String
-  imageUrl  String
+  id       Int    @id @default(autoincrement())
+  title    String
+  imageUrl String
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  ingredients Ingredient[]
+
+  variants ProductVariant[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Доп.ингридиенты к продукту
+model Ingredient {
+  id Int @id @default(autoincrement())
+
+  title    String @unique
+  price    Int
+  imageUrl String
+
+  product Product[]
+
+  CartItem CartItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("Ingredient")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  fullName String
+  email    String @unique
+  password String
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Пользователь имеется связь с вериф.кодом 1-1, но на момент создания пользователя он может не иметь код пока что. В любом случае без ? будет ошибка. Можно сделать в обратную сторону (сначала создать код, потом пользователя)
+  verificationCode VerificationCode?
+  verified         DateTime
+
+  userRole UserRole @default(USER)
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Через соц сети
+  provider   String?
+  providerId String?
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  //бро говорил 1 юзер - 1 корзина, но из-за автокомлпита у него Cart[] на 3.58
+  cart Cart?
+
+  order Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// * Вариация продукта
+model ProductVariant {
+  id          Int  @id @default(autoincrement())
+  price       Int
+  // 20-30-40
+  productSize Int?
+
+  // Тёплая, тонкая пицца
+  productType Int?
+  product     Product    @relation(fields: [productId], references: [id])
+  productId   Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  cartItems   CartItem[]
+
+  @@map("ProductVariant")
+}
+
+// Корзина
+model Cart {
+  id Int @id @default(autoincrement())
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @unique
+
+  totalAmount Int @default(0)
+
+  token String?
+
+  items CartItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Несколько предметов в корзине (один товар, другой товар [просто в корзине])
+model CartItem {
+  id Int @id @default(autoincrement())
+
+  productVariant ProductVariant @relation(fields: [productId], references: [id])
+  productId      Int
+
+  cart   Cart @relation(fields: [cartId], references: [id])
+  cartId Int
+
+  quantity Int @default(1)
+
+  // доп. ингридиенты (помимо базовых (из чего состоит пицца), может соусы)
+  ingredients Ingredient[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model VerificationCode {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+
+  code      String   @unique
+  createdAt DateTime @default(now())
+
+  @@unique([userId, code])
+}
+
+model Order {
+  id   Int   @id @default(autoincrement())
+  user User? @relation(fields: [userId], references: [id])
+
+  userId Int?
+
+  token String
+
+  totalAmount Int
+  status      OrderStatus
+
+  //нужен для сервиса оплаты (ю-мони, тинькофф, страйп)
+  paymentId String?
+
+  items Json
+
+  //доп. инфа для заказа (например, если я не для себя оформляю)
+  fullName  String
+  email     String
+  phone     String
+  adress    String
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  SUCCESSED
+  CANCELED
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
