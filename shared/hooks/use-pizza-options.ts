@@ -23,7 +23,6 @@ export function usePizzaOptions(variants: ProductWithVariants["variants"]) {
   const [selectedIngredients, { toggle: addIngredient }] = useSet(
     new Set<number>([]),
   );
-  const a = 20;
   const availablePizzaVariants = getAvailablePizzaSizes(variants, type);
   const findProductVariantId = variants.find(
     (variant) => variant.productSize === size && variant.productType === type,

@@ -29,7 +29,7 @@ export function CartDraverItem({
   const removeCartItem = useCartStore((state) => state.removeCartItem);
   const updateCartItemQuantityHandle = (
     type: "plus" | "minus",
-    quantity: number
+    quantity: number,
   ) => {
     const newQuantity = type === "plus" ? quantity + 1 : quantity - 1;
     updateItemQuantity(id, newQuantity);
@@ -39,9 +39,13 @@ export function CartDraverItem({
   };
   return (
     <div
-      className={cn("flex bg-white gap-6 p-5 border-b", {
-        "opacity-50 pointer-events-none": disabled,
-      })}
+      className={cn(
+        "flex bg-white gap-6 p-5 border-b",
+        {
+          "opacity-50 pointer-events-none": disabled,
+        },
+        className,
+      )}
     >
       <CartItemImage src={imageUrl} />
       <div

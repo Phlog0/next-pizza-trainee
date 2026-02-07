@@ -16,7 +16,12 @@ export function InfoBlock({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-center gap-12 justify-between max-w-96")}>
+    <div
+      className={cn(
+        "flex items-center gap-12 justify-between max-w-96",
+        className,
+      )}
+    >
       <div className="flex flex-col gap-6">
         <div>
           <Title text={title} />

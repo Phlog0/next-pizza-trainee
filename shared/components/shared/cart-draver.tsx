@@ -22,11 +22,7 @@ type CartDriverProps = {
   className?: string;
   title?: string;
 };
-export function CartDraver({
-  className,
-  children,
-  title,
-}: PropsWithChildren<CartDriverProps>) {
+export function CartDraver({ children }: PropsWithChildren<CartDriverProps>) {
   const fetchCartItems = useCartStore((state) => state.fetchCartItems);
   const totalAmount = useCartStore((state) => state.totalAmount);
   const cartItems = useCartStore((state) => state.cartItems);
@@ -65,7 +61,7 @@ export function CartDraver({
                       ? getCartItemsDetails(
                           item.productType as PizzaType,
                           item.productSize as PizzaSize,
-                          item.ingredients
+                          item.ingredients,
                         )
                       : ""
                   }

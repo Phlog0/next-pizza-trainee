@@ -17,7 +17,7 @@ export const CheckoutDeliveryAdress = () => {
         <Controller
           control={control}
           name="adress"
-          render={({ field, fieldState }) => (
+          render={({ field }) => (
             <>
               <AdressInput
                 onChange={field.onChange}

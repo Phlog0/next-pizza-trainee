@@ -11,7 +11,7 @@ type SelectedIngredients = {
 };
 export function useIngredients() {
   const [ingredientItems, setIngredientItems] = useState<SelectedIngredients[]>(
-    []
+    [],
   );
   const [isLoading, setIsLodaing] = useState(true);
   useEffect(() => {
@@ -20,7 +20,7 @@ export function useIngredients() {
         setIsLodaing(true);
         const data = await Api.ingredients.getAll();
         setIngredientItems(data);
-      } catch (e) {
+      } catch {
       } finally {
         setIsLodaing(false);
       }

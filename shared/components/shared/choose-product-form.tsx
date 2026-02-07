@@ -20,7 +20,6 @@ export function ChooseProductForm({
   className,
   imageUrl,
   variant,
-  onAddClick,
   title,
 }: ChoosePizzaFormProps) {
   const router = useRouter();

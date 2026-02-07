@@ -14,18 +14,12 @@ type NumberInputProps = InputHTMLAttributes<HTMLInputElement> & {
   required?: boolean;
   className?: string;
 };
-export function PhoneNumberInput({
-  name,
-  label,
-  required,
-  ...props
-}: NumberInputProps) {
+export function PhoneNumberInput({ name, label, required }: NumberInputProps) {
   const {
     control,
     formState: { errors },
     watch,
     setValue,
-    reset,
   } = useFormContext();
   const value = watch(name);
   const errorText = errors[name]?.message;

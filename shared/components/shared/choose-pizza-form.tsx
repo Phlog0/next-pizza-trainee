@@ -4,11 +4,7 @@ import { ProductImage } from "./product-image";
 import { Title } from "./title";
 import { Button } from "../ui";
 import { GroupVariants } from "./group-variants";
-import {
-  PizzaSize,
-  PizzaType,
-  pizzaTypes,
-} from "@/shared/constants";
+import { PizzaSize, PizzaType, pizzaTypes } from "@/shared/constants";
 import { Ingredient } from "@prisma/client";
 import { IngredientProfile } from "./ingredient-profile";
 import { ProductWithVariants } from "@/@types";
@@ -31,7 +27,6 @@ export function ChoosePizzaForm({
   className,
   imageUrl,
   ingredients,
-  onAddClickCard,
   title,
 
   variants,
@@ -87,7 +82,7 @@ export function ChoosePizzaForm({
     type,
     size,
     ingredients,
-    selectedIngredients
+    selectedIngredients,
   );
 
   return (
