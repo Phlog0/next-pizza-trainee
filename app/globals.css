@@ -144,3 +144,12 @@ html {
 .scrollbar::-webkit-scrollbar-thumb:hover {
   background: #dbdadd;
 }
+
+.header-layout-container {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+}
+
+/* * {
+  outline: 2px solid red !important;
+} */

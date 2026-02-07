@@ -26,7 +26,7 @@ export function ProfileButton({
         <Link href={"/profile"}>
           <Button>
             <CircleUser size={18} />
-            Профиль
+            <span className="hidden md:block">Профиль</span>
           </Button>
         </Link>
       )}

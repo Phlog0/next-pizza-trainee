@@ -14,24 +14,44 @@ import {
 import { useCartStore } from "@/shared/store";
 import { cn } from "@/lib/utils";
 import { createOrder } from "@/app/actions";
-import { useState } from "react";
-import { set } from "zod";
-import { verifyConnection } from "@/lib/email";
+import { useEffect, useState } from "react";
 import { calcTotalAmountWithPercentages } from "@/lib";
+import { useSession } from "next-auth/react";
+import { Api } from "@/shared/services";
+import { redirect } from "next/navigation";
 export default function CheckoutPage() {
   const totalAmount = useCartStore((state) => state.totalAmount);
+  const { data: session } = useSession();
   const [submitting, setSubmitting] = useState(false);
   const form = useForm<InferedCheckoutFormSchema>({
     resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
-      email: "sergey.zadorkin.1@yandex.ru",
-      firstName: "Sergey",
-      lastName: "Zadorkin",
-      phone: "1111111111111111111",
-      adress: "г Москва",
-      comment: "доп.коммент",
+      email: session?.user.email || "",
+      firstName: "",
+      lastName: "",
+      phone: "",
+      adress: "",
+      comment: "",
     },
   });
+  useEffect(() => {
+    async function fetchUserData() {
+      const userData = await Api.me.getMeData();
+      if (!userData) {
+        toast.error("Не удалось получить данные пользователя");
+        redirect("/not-auth");
+      }
+      if (userData) {
+        form.setValue("email", userData.email || "");
+        form.setValue("firstName", userData.fullName.split(" ")[0] || "");
+        form.setValue("lastName", userData.fullName.split(" ")[1] || "");
+      }
+    }
+    if (session) {
+      fetchUserData();
+    }
+  }, [session, form]);
+
   const onSubmit: SubmitHandler<InferedCheckoutFormSchema> = async (data) => {
     try {
       setSubmitting(true);
@@ -52,7 +72,7 @@ export default function CheckoutPage() {
       if (url) {
         location.href = url;
       }
-    } catch (error) {
+    } catch  {
       setSubmitting(false);
 
       toast.error("Не удалось создать заказ!", {
@@ -65,7 +85,7 @@ export default function CheckoutPage() {
     }
   };
   const onError = (errors: any) => {
-    console.log("form errors:", errors);
+    console.error("form errors:", errors);
   };
 
   const loading = useCartStore((state) => state.loading);
@@ -76,7 +96,7 @@ export default function CheckoutPage() {
           <Title text="Оформление заказа" size="xl" />
           <fieldset
             className={cn(
-              "flex justify-between gap-5 w-full transition-opacity",
+              "flex flex-col lg:flex-row justify-between gap-5 w-full transition-opacity",
               {
                 "pointer-events-none opacity-50": loading,
               }
@@ -88,7 +108,7 @@ export default function CheckoutPage() {
                 <CheckoutCartItems className="h-90" />
               </WhiteBlock>
               <CheckoutPersonalData />
-              {/* опять странно. Весь page client, но мне нужно еще раз использовать use client в AdressInput */}
+
               <CheckoutDeliveryAdress />
             </div>
             <CheckoutSidebar submitting={submitting} />

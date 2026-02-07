@@ -4,7 +4,6 @@ import { PizzaSize, PizzaType } from "../constants";
 import { getAvailablePizzaSizes } from "@/lib";
 import { useSet } from "react-use";
 import { ProductWithVariants } from "@/@types";
-import { AvailableVariant } from "../components/shared/group-variants";
 // type UsePizzaOptionsReturnType = {
 //   size: PizzaSize;
 //   setSize: (pizzaSize: PizzaSize) => void;
@@ -22,19 +21,20 @@ export function usePizzaOptions(variants: ProductWithVariants["variants"]) {
   const [size, setSize] = useState<PizzaSize>(20);
   const [type, setType] = useState<PizzaType>(1);
   const [selectedIngredients, { toggle: addIngredient }] = useSet(
-    new Set<number>([])
+    new Set<number>([]),
   );
+  const a = 20;
   const availablePizzaVariants = getAvailablePizzaSizes(variants, type);
   const findProductVariantId = variants.find(
-    (variant) => variant.productSize === size && variant.productType === type
+    (variant) => variant.productSize === size && variant.productType === type,
   )?.id;
   useEffect(() => {
     const isAvailableSize = availablePizzaVariants.find(
-      (variant) => Number(variant.value) === size && !variant.disabled
+      (variant) => Number(variant.value) === size && !variant.disabled,
     )?.value;
 
     const availablePizzaVariantSize = availablePizzaVariants.find(
-      (variant) => !variant.disabled
+      (variant) => !variant.disabled,
     )?.value;
     if (!isAvailableSize && availablePizzaVariantSize) {
       setSize(Number(availablePizzaVariantSize) as PizzaSize);

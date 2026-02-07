@@ -1,5 +1,3 @@
-import { Ingredient } from "@prisma/client";
-import { PizzaSize, PizzaType } from "@/shared/constants";
 import { create } from "zustand";
 import { Api } from "@/shared/services";
 import { getCartDetails } from "@/lib";
@@ -15,7 +13,6 @@ export type CartState = {
   fetchCartItems: () => Promise<void>;
   updateItemQuantity: (id: number, quantity: number) => Promise<void>;
   removeCartItem: (id: number) => Promise<void>;
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   addCartItem: (values: CreateCartItemValues) => Promise<void>;
 };
 export const useCartStore = create<CartState>()((set, get) => ({
@@ -27,6 +24,7 @@ export const useCartStore = create<CartState>()((set, get) => ({
     try {
       set({ loading: true, error: false });
       const data = await Api.cart.getCart();
+      console.log({ data });
       if (data) {
         set(getCartDetails(data));
       }
@@ -39,7 +37,17 @@ export const useCartStore = create<CartState>()((set, get) => ({
   },
   removeCartItem: async (id) => {
     try {
-      set({ loading: true, error: false });
+      set({
+        cartItems: get().cartItems.map((item) => {
+          if (item.id === id) {
+            return { ...item, disabled: true };
+          } else {
+            return { ...item, disabled: false };
+          }
+        }),
+        loading: true,
+        error: false,
+      });
       const data = await Api.cart.removeCartItem(id);
       if (data) {
         set(getCartDetails(data));

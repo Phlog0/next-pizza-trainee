@@ -9,7 +9,7 @@ export const formLoginSchema = z.object({
 });
 export const formRegisterSchema = formLoginSchema
   .extend({
-    fullname: z
+    fullName: z
       .string()
       .min(2, { error: "Имя долнжо содердать не менее 2 символов" }),
     confirmPassword: passwordSchema,

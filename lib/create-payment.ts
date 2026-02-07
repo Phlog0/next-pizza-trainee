@@ -1,5 +1,4 @@
 import { YokassaPaymentData } from "@/@types";
-import { axiosInstance } from "@/shared/services/axios-instance";
 import axios from "axios";
 
 interface CreatePaymentDetails {

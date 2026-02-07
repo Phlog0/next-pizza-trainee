@@ -13,7 +13,7 @@ export function ProductImage({
   imageTitle: string;
 }) {
   return (
-    <div className={cn("relative")}>
+    <div className={cn("relative overflow-hidden")}>
       <img
         src={imageUrl}
         alt={imageTitle}
@@ -26,6 +26,7 @@ export function ProductImage({
           },
           className,
           "object-contain"
+          // "w-3 h-3"
         )}
       />
 

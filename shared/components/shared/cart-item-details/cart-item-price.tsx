@@ -5,5 +5,9 @@ type CartItemPriceProps = {
   className?: string;
 };
 export function CartItemPrice({ value, className }: CartItemPriceProps) {
-  return <h2 className={cn("font-bold", className)}>{value} ₽</h2>;
+  return (
+    <h2 className={cn("text-[12px] sm:text-base font-bold", className)}>
+      {value} ₽
+    </h2>
+  );
 }

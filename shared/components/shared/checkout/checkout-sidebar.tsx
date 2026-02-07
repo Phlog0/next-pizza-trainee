@@ -13,50 +13,52 @@ export function CheckoutSidebar({ submitting }: { submitting: boolean }) {
   return (
     <>
       {/* {totalAmount ? ( */}
-      <div className="bg-red-400 max-w-xl flex-1">
+      <div className="lg:max-w-xl flex-1">
         <WhiteBlock className="p-6 sticky top-4">
           {loading ? (
             <Skeleton className="w-83 h-18" />
           ) : (
             <div className="flex flex-col gap-4">
               <span className="text-xs">Итого</span>
-              <span className="font-extrabold text-4xl">
+              <span className="font-extrabold text-xl md:text-4xl">
                 {totalAmountWithPercentages} ₽
               </span>
             </div>
           )}
-          <CheckoutDetailsItem
-            className="items-center"
-            price={totalAmount}
-            title={
-              <div className="flex gap-2 ">
-                <Package className=" text-gray-300" />
-                Стоимость товара
-              </div>
-            }
-          />
-          <CheckoutDetailsItem
-            price={Number(taxesPrice)}
-            title={
-              <div className="flex gap-2 ">
-                <Percent className=" text-gray-300" />
-                Налоги
-              </div>
-            }
-          />
-          <CheckoutDetailsItem
-            price={deliveryPrice}
-            title={
-              <div className="flex gap-2 ">
-                <Truck className=" text-gray-300" />
-                Доставка товара
-              </div>
-            }
-          />
+          <div className="text-[10px]">
+            <CheckoutDetailsItem
+              className="items-center"
+              price={totalAmount}
+              title={
+                <div className="flex gap-2 text-[10px]">
+                  <Package className=" text-gray-300" />
+                  Стоимость товара
+                </div>
+              }
+            />
+            <CheckoutDetailsItem
+              price={Number(taxesPrice)}
+              title={
+                <div className="flex gap-2 text-[10px]">
+                  <Percent className=" text-gray-300" />
+                  Налоги
+                </div>
+              }
+            />
+            <CheckoutDetailsItem
+              price={deliveryPrice}
+              title={
+                <div className="flex gap-2 text-[10px]">
+                  <Truck className=" text-gray-300 " />
+                  Доставка товара
+                </div>
+              }
+            />
+          </div>
           <Button
             variant={loading || submitting ? "loading" : "default"}
             type="submit"
-            className="w-full py-10 text-2xl mt-10"
+            className="w-full py-5 sm:py-10  mt-5 sm:mt-10 text-sm md:text-2xl"
           >
             Перейти к оплате <ArrowRight />
           </Button>

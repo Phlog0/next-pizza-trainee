@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
         pathname: "/static/Img/**",
         search: "",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.inappstory.ru",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

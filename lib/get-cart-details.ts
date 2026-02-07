@@ -9,6 +9,7 @@ export type TCartStateItem = {
   productSize?: number | null;
   productType?: number | null;
   // Есть totalAmount - это все товары (весь список). Price - это функция подсчёта одного товара корзины (с ингредиентами и прочимии штуковинами)
+  disabled?: boolean;
   title: string;
   price: number;
   ingredients: { price: number; title: string }[] | [];
@@ -20,7 +21,6 @@ type ReturnType = {
   cartItems: TCartStateItem[];
 };
 export const getCartDetails = (data: CartDto): ReturnType => {
-  console.log({ data });
   const flatItems: TCartStateItem[] = data.items.map((item) => ({
     id: item.id,
     quantity: item.quantity,
@@ -30,6 +30,7 @@ export const getCartDetails = (data: CartDto): ReturnType => {
     productSize: item.productVariant.productSize,
     productType: item.productVariant.productType,
     price: calcCartItemPrice(item),
+    disabled: false,
   }));
   return { totalAmount: data.totalAmount, cartItems: flatItems };
 };

@@ -21,20 +21,22 @@ export function LoginForm({ onClose }: LoginFormProps) {
 
   const onSubmit = async (data: InferedFormLoginSchema) => {
     try {
-      console.log(data);
       const response = await signIn("credentials", {
         ...data,
         redirect: false,
       });
+      console.log({ response });
       if (!response?.ok) {
-        throw new Error();
+        throw new Error("Ошибка авторизации");
       }
 
       toast.success("Вы успешно вошли в аккаунт");
       onClose();
     } catch (error) {
       console.error("Error [LOGIN]", error);
-      toast.error("Ошибка авторизации");
+      toast.error(
+        error instanceof Error ? error.message : "Ошибка авторизации",
+      );
     }
   };
   return (

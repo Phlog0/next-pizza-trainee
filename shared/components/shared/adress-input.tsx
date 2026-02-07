@@ -6,9 +6,10 @@ import {
   DaDataSuggestion,
 } from "react-dadata";
 import "react-dadata/dist/react-dadata.css";
-import { Noop, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RequiredSymbol } from "./required-symbol";
 import { ClearButton } from "./forms";
+import { ErrorText } from "./error-text";
 export function AdressInput({
   onChange,
   name,
@@ -41,7 +42,6 @@ export function AdressInput({
     });
     setAddressValue(undefined);
   };
-  console.log({ name, value });
 
   return (
     <div>
@@ -52,7 +52,7 @@ export function AdressInput({
       )}
       <div className="relative">
         <AddressSuggestions
-          token="acdcf17d823f48f2d1da0237666951c8614ec19b"
+          token={process.env.NEXT_PUBLIC_DADATA_API_KEY as string}
           uid={id}
           onChange={(data) => {
             onChange(data?.value);
@@ -63,6 +63,7 @@ export function AdressInput({
         />
         {value && <ClearButton onClick={onClickClear} />}
       </div>
+      {errorText && <ErrorText text={String(errorText)} className="mt-2" />}
     </div>
   );
 }

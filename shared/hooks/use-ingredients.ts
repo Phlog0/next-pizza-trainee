@@ -21,7 +21,6 @@ export function useIngredients() {
         const data = await Api.ingredients.getAll();
         setIngredientItems(data);
       } catch (e) {
-        console.log(e);
       } finally {
         setIsLodaing(false);
       }

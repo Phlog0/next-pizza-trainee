@@ -1,4 +1,11 @@
-import { categories, ingredients, products, users } from "./constants";
+import {
+  categories,
+  ingredients,
+  products,
+  stories,
+  storyItems,
+  users,
+} from "./constants";
 import { prisma } from "./prisma";
 import { hashSync } from "bcrypt";
 import { type Prisma } from "@prisma/client";
@@ -170,7 +177,12 @@ async function up() {
       ingredients: { connect: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }] },
     },
   });
+  await prisma.story.createMany({ data: stories });
+  await prisma.storyItem.createMany({
+    data: storyItems,
+  });
 }
+
 async function down() {
   //Очищаем автоинкримент ID и каскадно очищаем
   await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
@@ -180,20 +192,22 @@ async function down() {
   await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Story" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "StoryItem" RESTART IDENTITY CASCADE`;
 }
 async function main() {
   try {
     await down();
     await up();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
 main()
   .then(async () => await prisma.$disconnect())
   .catch(async (e) => {
-    console.log(e);
+    console.error(e);
     await prisma.$disconnect();
     process.exit(1);
   });

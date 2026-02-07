@@ -1,9 +1,8 @@
 "use client";
-import { cn } from "@/lib/utils";
 import { RequiredSymbol } from "../required-symbol";
-import { Input, Textarea } from "../../ui";
+import { Textarea } from "../../ui";
 import { ErrorText } from "../error-text";
-import { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import { TextareaHTMLAttributes } from "react";
 import { ClearButton } from "./clear-button";
 import { useFormContext } from "react-hook-form";
 

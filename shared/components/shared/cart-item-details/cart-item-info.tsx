@@ -1,6 +1,3 @@
-import { getCartItemsDetails } from "@/lib";
-import { mapPizzaType, PizzaSize, PizzaType } from "@/shared/constants";
-import { Ingredient } from "@prisma/client";
 import React from "react";
 type CartItemInfoProps = {
   className?: string;

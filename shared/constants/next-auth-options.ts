@@ -1,12 +1,13 @@
 import { AuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import VkProvider from "next-auth/providers/vk";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/prisma/prisma";
 import { compare, hashSync } from "bcrypt";
-import { UserRole } from "@prisma/client";
 
 export const authOptions: AuthOptions = {
-  // Configure one or more authentication providers
+  // ! Проблема: я зашел с гитхаба, потом поменял в акке почту. Тепреь с почты я могу зайти, а с гитхаба вылетает ошибка
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID || "",
@@ -17,9 +18,27 @@ export const authOptions: AuthOptions = {
           name: profile.name || profile.login,
           email: profile.email,
           img: profile.avatar_url,
-          userRole: "USER" as UserRole,
+          userRole: "USER",
         };
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      profile(profile) {
+        console.log("Google profile:", profile); // ← вот так
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          userRole: "USER",
+        };
+      },
+    }),
+    VkProvider({
+      clientId: process.env.VK_CLIENT_ID || "",
+      clientSecret: process.env.VK_CLIENT_SECRET || "",
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -41,15 +60,15 @@ export const authOptions: AuthOptions = {
         }
         const isPasswordValid = await compare(
           credentials.password,
-          findUser.password
+          findUser.password,
         );
         if (!isPasswordValid) {
           return null;
         }
 
-        if (!findUser.verified) {
-          return null;
-        }
+        // if (!findUser.verified) {
+        //   return null;
+        // }
         return {
           id: findUser.id,
           email: findUser.email,
@@ -58,7 +77,6 @@ export const authOptions: AuthOptions = {
         };
       },
     }),
-    // ...add more providers here
   ],
   secret: process.env.NEXTAUTH_JWT_SECRET,
   session: {
@@ -133,7 +151,7 @@ export const authOptions: AuthOptions = {
       }
       return token;
     },
-    session({ session, token }) {
+    async session({ session, token }) {
       if (session?.user) {
         session.user.id = token.id;
         session.user.userRole = token.userRole;

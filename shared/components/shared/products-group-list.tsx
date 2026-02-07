@@ -39,7 +39,11 @@ export function ProductsGroupList({
   return (
     <div className={cn(className)} id={title} ref={intersectionRef}>
       <Title text={title} size="lg" />
-      <div className={cn("grid grid-cols-3 grid-rows-1 gap-17.5")}>
+      <div
+        className={cn(
+          "grid grid-rows-1 gap-17.5 grid-col-1 md:grid-cols-2 lg:grid-cols-3"
+        )}
+      >
         {items?.map((product) => (
           <ProductCard
             key={product.id}

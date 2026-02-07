@@ -24,7 +24,7 @@ export function GroupVariants({
     <div
       className={cn(
         "w-full rounded-3xl p-1 select-none bg-amber-100",
-        "flex gap-4 flex-wrap",
+        "flex gap-4 flex-wrap justify-center",
         className
       )}
     >
@@ -33,7 +33,7 @@ export function GroupVariants({
           key={variant.title}
           onClick={() => onClick?.(variant.value)}
           disabled={variant.disabled}
-          className={cn("transition-colors flex-1 ", {
+          className={cn("transition-colors", {
             "bg-white shadow text-primary hover:bg-white":
               variant.value === selectedValue,
           })}

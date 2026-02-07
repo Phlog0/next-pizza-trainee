@@ -12,7 +12,7 @@ import {
 } from "@/shared/components/ui";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { CartDraverItem } from "./cart-draver-item";
 import { getCartItemsDetails } from "@/lib";
 import { useCartStore } from "@/shared/store";
@@ -58,6 +58,7 @@ export function CartDraver({
                   imageUrl={item.imageUrl}
                   title={item.title}
                   price={item.price}
+                  disabled={item.disabled}
                   quantity={item.quantity}
                   details={
                     item.productSize && item.productType

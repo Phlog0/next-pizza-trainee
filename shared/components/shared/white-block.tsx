@@ -18,12 +18,12 @@ export function WhiteBlock({
   return (
     <div className={cn("bg-white rounded-xl", className)}>
       {title && (
-        <div className="flex items-center justify-between py-5 px-7 border-b border-b-gray-200">
+        <div className="flex items-center justify-between py-5 px-2 md:px-7 border-b border-b-gray-200">
           <Title text={title} size="sm" className="font-bold" />
           {endAdornment}
         </div>
       )}
-      <div className={cn("px-5 py-4", contentClassName)}>{children}</div>
+      <div className={cn("px-2 py-4", contentClassName)}>{children}</div>
     </div>
   );
 }

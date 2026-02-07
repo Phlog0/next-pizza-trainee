@@ -3,18 +3,17 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { findOrCreateCart, patchTotalAmount } from "@/lib";
 import { CreateCartItemValues } from "@/shared/services/dto";
-import { updateCartItemQuantity } from "@/shared/services/cart";
 import { COOKIES_KEYS } from "@/shared/constants";
 export async function GET(req: NextRequest) {
   try {
-    const userId = 1;
     const token = req.cookies.get("cartToken")?.value;
 
     if (!token) {
       return NextResponse.json({
-        cart: [],
-        totalAmount: 0,
+        cart: null,
+
         message: "cart token is not found",
+        status: "not_found",
       });
     }
 
@@ -40,11 +39,20 @@ export async function GET(req: NextRequest) {
         },
       },
     });
-    return NextResponse.json(userCart);
+    return NextResponse.json({
+      cart: userCart,
+
+      message: null,
+      status: "success",
+    });
   } catch (error) {
     console.error("[CART_GET server error", error);
     return NextResponse.json(
-      { message: "Не удалось получить корзину" },
+      {
+        status: "error",
+        cart: null,
+        message: "Не удалось получить корзину",
+      },
       { status: 500 }
     );
   }
@@ -98,7 +106,7 @@ export async function POST(req: NextRequest) {
       });
     }
     const updatedUserCart = await patchTotalAmount(token);
-    let response = NextResponse.json(updatedUserCart);
+    const response = NextResponse.json(updatedUserCart);
     response.cookies.set(COOKIES_KEYS.CART_TOKEN, token);
     return response;
   } catch (error) {

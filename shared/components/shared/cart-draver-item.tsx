@@ -16,6 +16,7 @@ type CartDriverItemProps = CartItemProps & {
 };
 export function CartDraverItem({
   className,
+  disabled,
   imageUrl,
   price,
   quantity,
@@ -37,7 +38,11 @@ export function CartDraverItem({
     removeCartItem(id);
   };
   return (
-    <div className={"flex bg-white gap-6 p-5 border-b"}>
+    <div
+      className={cn("flex bg-white gap-6 p-5 border-b", {
+        "opacity-50 pointer-events-none": disabled,
+      })}
+    >
       <CartItemImage src={imageUrl} />
       <div
         className={cn("flex-1", {

@@ -1,10 +1,29 @@
-import { Cart } from "@prisma/client";
 import { axiosInstance } from "./axios-instance";
 import { ApiRoutes } from "./api-constants";
 import { CartDto, CreateCartItemValues } from "./dto/cart.dto";
+export type GetCartApiResponse<T = null> = {
+  status: "success" | "error" | "not_found";
+  cart: T;
+  message: string | null;
+};
+export const getCart = async (): Promise<CartDto | null> => {
+  try {
+    const response = await axiosInstance.get<GetCartApiResponse<CartDto>>(
+      ApiRoutes.CART
+    );
 
-export const getCart = async (): Promise<CartDto> => {
-  return (await axiosInstance.get<CartDto>(ApiRoutes.CART)).data;
+    if (response.data.status === "success" && response.data.cart) {
+      return response.data.cart;
+    }
+
+    if (response.data.status === "not_found") {
+      return null;
+    }
+    throw new Error(response.data.message || "Unknown error");
+  } catch (error) {
+    console.error("Failed to get cart:", error);
+    return null;
+  }
 };
 export const updateCartItemQuantity = async (
   cartItemId: number,

@@ -1,8 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { AdressInput } from "../adress-input";
-import { FormInput, FormTextarea } from "../forms";
+import { FormTextarea } from "../forms";
 import { WhiteBlock } from "../white-block";
-import { ErrorText } from "../error-text";
 
 export const CheckoutDeliveryAdress = () => {
   const { control } = useFormContext();
@@ -26,11 +25,11 @@ export const CheckoutDeliveryAdress = () => {
                 name={field.name}
                 required
               />
-              {fieldState.error?.message && (
+              {/* {fieldState.error?.message && (
                 <ErrorText
                   text={fieldState.error.message || "Ошибка в адресе"}
                 />
-              )}
+              )} */}
             </>
           )}
         />

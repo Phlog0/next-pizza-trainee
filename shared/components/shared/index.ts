@@ -25,3 +25,7 @@ export { AdressInput } from "./adress-input";
 export { Providers } from "./providers";
 export { ProfileButton } from "./profile-button";
 export { InfoBlock } from "./info-block";
+export { ShopStories } from "./shop-stories";
+export { PhoneNumberInput } from "./phone-number-input";
+
+export { FiltersAccordion } from "./filters-accordion";

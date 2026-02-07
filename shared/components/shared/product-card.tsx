@@ -25,17 +25,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   //FIXME <img className="w-[215px] h-[215px]
   return (
-    <div className={cn(className, "bg-gray-50/")}>
+    <div className={cn(className, "bg-gray-50 overflow-hidden")}>
       <Link scroll={false} href={`product/${id}`}>
-        <div className="flex justify-center p-6 bg-secondary rounded-lg">
+        <div className="flex justify-center bg-secondary rounded-lg">
           <img
-            className="w-[215px] h-[215px] object-contain"
+            className="w-[215px] h-[215px] object-cover"
             src={imageUrl}
             alt={title}
           />
         </div>
-        <Title size="sm" text={title} className="mb-1 mt-3 font-bold" />
-        <p className="text-gray-400 text-sm max-h-6 overflow-hidden whitespace-nowrap text-ellipsis">
+        <Title size="xs" text={title} className="mb-1 mt-3 font-bold" />
+        <p className="block text-gray-400 text-sm max-h-6 overflow-hidden whitespace-nowrap text-ellipsis w-[80%]">
           {ingredients.map((item) => item.title).join(",")}
         </p>
         <div className="flex items-center justify-between mt-4">

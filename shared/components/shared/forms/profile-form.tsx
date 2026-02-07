@@ -1,3 +1,4 @@
+"use client";
 import { FormProvider, useForm } from "react-hook-form";
 import {
   formRegisterSchema,
@@ -11,6 +12,7 @@ import { Container } from "../container";
 import { Title } from "../title";
 import { FormInput } from "./form-input";
 import { Button } from "../../ui";
+import { updateUserInfo } from "@/app/actions";
 
 export function ProfileForm({ data }: { data: User }) {
   const form = useForm<InferedFormRegisterSchema>({
@@ -19,15 +21,15 @@ export function ProfileForm({ data }: { data: User }) {
       email: data.email,
       password: "",
       confirmPassword: "",
-      fullname: data.fullName,
+      fullName: data.fullName,
     },
   });
   const onSubmit = async (values: InferedFormRegisterSchema) => {
     try {
       await updateUserInfo({
         email: values.email,
-        fullname: values.fullname,
-        password: values.password,
+        fullName: values.fullName,
+        password: values.password || undefined,
       });
       toast.success("Данные обновлены!");
     } catch (error) {

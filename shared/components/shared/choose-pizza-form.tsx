@@ -2,22 +2,17 @@
 import { cn } from "@/lib/utils";
 import { ProductImage } from "./product-image";
 import { Title } from "./title";
-import { Button, DialogHeader, DialogTitle } from "../ui";
+import { Button } from "../ui";
 import { GroupVariants } from "./group-variants";
 import {
-  mapPizzaSize,
-  mapPizzaType,
   PizzaSize,
-  pizzaSizes,
   PizzaType,
   pizzaTypes,
 } from "@/shared/constants";
-import { PropsWithChildren, useEffect, useState } from "react";
 import { Ingredient } from "@prisma/client";
 import { IngredientProfile } from "./ingredient-profile";
-import { useSet } from "react-use";
 import { ProductWithVariants } from "@/@types";
-import { calcTotalPizzaPrice, getAvailablePizzaSizes } from "@/lib";
+import { calcTotalPizzaPrice } from "@/lib";
 import { usePizzaOptions } from "@/shared/hooks";
 import { useCartStore } from "@/shared/store";
 import { toast } from "sonner";
@@ -96,15 +91,17 @@ export function ChoosePizzaForm({
   );
 
   return (
-    <div className={cn("h-full flex rounded-3xl", className)}>
+    <div
+      className={cn("h-full flex flex-col md:flex-row rounded-3xl", className)}
+    >
       <ProductImage
         size={size}
         imageUrl={imageUrl}
         imageTitle={title}
         className="bg-white rounded-full h-fit"
       />
-      <div className="bg-gray-100 px-7 py-1 z-3 max-w-1/2">
-        <Title text={title} size="md" className="font-extrabold mb-1 " />
+      <div className="bg-gray-100 md:px-7 py-1 z-3">
+        <Title text={title} size="md" className="font-extrabold mb-1" />
         <p className="text-gray-400">{textDetails}</p>
         <GroupVariants
           // variants={pizzaSizes}
@@ -121,7 +118,7 @@ export function ChoosePizzaForm({
           />
         </div>
         <div className="h-60 bg-gray-50 rounded-md p-5 overflow-auto scrollbar mt-5">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {ingredients.map((item) => (
               <IngredientProfile
                 key={item.id}
@@ -135,14 +132,19 @@ export function ChoosePizzaForm({
           </div>
         </div>
         <Button
-          className="text-base w-full px-10 mt-10"
+          className="w-full px-4 sm:px-10 mt-10"
           onClick={handleCLickAdd}
           disabled={loading}
         >
           {loading ? (
             <Loader2 className="animate-spin" />
           ) : (
-            `Добавить в корзину за ${totalPrice} ₽`
+            <>
+              <span className="block sm:hidden">За ${totalPrice} ₽</span>
+              <span className="hidden sm:block">
+                Добавить в корзину за ${totalPrice} ₽
+              </span>
+            </>
           )}
         </Button>
       </div>

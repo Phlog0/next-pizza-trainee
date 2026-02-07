@@ -5,36 +5,35 @@ import { Title } from "@/shared/components/shared";
 import { FormInput } from "@/shared/components/shared/forms";
 import { Button } from "@/shared/components/ui";
 import { toast } from "sonner";
-import { signIn } from "next-auth/react";
+import { registerUser } from "@/app/actions";
 
-type RegisterFormProps = {
+type LoginFormProps = {
   onClose: VoidFunction;
 };
-export function RegisterForm({ onClose }: RegisterFormProps) {
+export function RegisterForm({ onClose }: LoginFormProps) {
   const form = useForm<InferedFormRegisterSchema>({
     resolver: zodResolver(formRegisterSchema),
     defaultValues: {
       email: "",
       password: "",
+      fullName: "",
+      confirmPassword: "",
     },
   });
 
   const onSubmit = async (data: InferedFormRegisterSchema) => {
     try {
-      console.log(data);
-      const response = await signIn("credentials", {
-        ...data,
-        redirect: false,
+      await registerUser({
+        email: data.email,
+        fullName: data.fullName,
+        password: data.password,
       });
-      if (!response?.ok) {
-        throw Error();
-      }
 
-      toast.success("Вы успешно зарегистрировались");
+      toast.success("Регистрация прошла успешно, подтвердите свою почту!");
       onClose();
     } catch (error) {
-      console.error("Error [REGISTRATION]", error);
-      toast.error("Ошибка регистрации");
+      console.error("Error [REGISTER]", error);
+      toast.error("Ошибка авторизации" + error);
     }
   };
   return (
@@ -44,21 +43,23 @@ export function RegisterForm({ onClose }: RegisterFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="flex justify-between items-center">
-          <div className="mr-2">
-            <Title text="Вход в аккаунт" size="md" className="font-bold" />
-            <p className="text-gray-400">
-              Введите своб почту, чтобы войти в аккаунт
-            </p>
-          </div>
+          <Title text="Регистрация аккаунта" size="md" className="font-bold" />
         </div>
+        <FormInput label="Полное имя" name="fullName" required />
         <FormInput label="E-mail" name="email" required />
-        <FormInput label="Пароль" name="password" required />
+        <FormInput label="Пароль" name="password" required type="password" />
+        <FormInput
+          label="Подтвердите пароль"
+          name="confirmPassword"
+          required
+          type="password"
+        />
         <Button
           type="submit"
           className="text-base"
           variant={form.formState.isSubmitting ? "loading" : "default"}
         >
-          {form.formState.isSubmitting ? "Вход..." : "Войти"}
+          Зарегистрироваться
         </Button>
       </form>
     </FormProvider>

@@ -71,7 +71,7 @@ model User {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Пользователь имеется связь с вериф.кодом 1-1, но на момент создания пользователя он может не иметь код пока что. В любом случае без ? будет ошибка. Можно сделать в обратную сторону (сначала создать код, потом пользователя)
   verificationCode VerificationCode?
-  verified         DateTime
+  verified         DateTime?
 
   userRole UserRole @default(USER)
 
@@ -149,9 +149,10 @@ model VerificationCode {
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
 
-  code      String   @unique
+  code      String
   createdAt DateTime @default(now())
 
+  //Проверка если в таблице есть строки и у них равны и email и code, 
   @@unique([userId, code])
 }
 
@@ -179,6 +180,21 @@ model Order {
   comment   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model StoryItem {
+  id Int @id @default(autoincrement())
+
+  story        Story?   @relation(fields: [storyId], references: [id])
+  storyId      Int
+  sourceImgUrl String
+  createdAt    DateTime @default(now())
+}
+
+model Story {
+  id                Int         @id @default(autoincrement())
+  previewDefaultImg String
+  storyItems        StoryItem[]
 }
 
 enum OrderStatus {

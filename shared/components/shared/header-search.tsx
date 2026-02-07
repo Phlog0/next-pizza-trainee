@@ -1,7 +1,7 @@
 "use client";
 import { Search } from "lucide-react";
 import { Input } from "../ui";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,7 +13,13 @@ export function HeaderSearch({ className }: { className?: string }) {
   const [focused, setFocused] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
-  useClickAway(ref, () => setFocused(false));
+  useClickAway(ref, () => {
+    setFocused(false);
+    const documentBody = document.querySelector("body");
+    if (documentBody) {
+      documentBody.style.overflow = "auto";
+    }
+  });
 
   const [products, setProducts] = useState<Product[]>([]);
   useDebounce(
@@ -22,7 +28,7 @@ export function HeaderSearch({ className }: { className?: string }) {
         const data = await Api.products.search(searchQuery);
         setProducts(data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     250,
@@ -33,22 +39,32 @@ export function HeaderSearch({ className }: { className?: string }) {
     setSearchQuery("");
     setProducts([]);
     setFocused(false);
+    const documentBody = document.querySelector("body");
+    if (documentBody) {
+      documentBody.style.overflow = "auto";
+    }
   };
   return (
     <>
-      {focused && (
-        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black/20 z-20" />
-      )}
       <div
         ref={ref}
-        className="flex flex-col flex-1 items-center z-20 bg-white rounded-xl relative"
+        className={cn(
+          "flex flex-col flex-1 items-center z-20 bg-white rounded-xl relative",
+          className
+        )}
       >
         <Search className="absolute left-1 text-gray-400" />
         <Input
           onChange={(e) => setSearchQuery(e.target.value)}
           className="border-0 bg-none px-10"
           placeholder="Найти пиццу..."
-          onFocus={() => setFocused(true)}
+          onFocus={() => {
+            const documentBody = document.querySelector("body");
+            if (documentBody) {
+              documentBody.style.overflow = "hidden";
+            }
+            setFocused(true);
+          }}
         />
 
         {products.length > 0 && (

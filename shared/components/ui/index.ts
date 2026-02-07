@@ -60,3 +60,10 @@ export {
 export { Toaster } from "./sonner";
 
 export { Textarea } from "./textarea";
+
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "./accordion";

@@ -1,6 +1,7 @@
 import { Container, Header } from "@/shared/components/shared";
+import { Skeleton } from "@/shared/components/ui";
 import { Metadata } from "next";
-import React from "react";
+import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Next Pizza | Корзина",
@@ -14,11 +15,13 @@ export default function CheckoutLayout({
 }) {
   return (
     <main className="min-h-screen bg-amber-200/45">
-      <Header
-        className="border-b border-gray-500"
-        hasCheckout={true}
-        hasCart={false}
-      />
+      <Suspense fallback={<Skeleton className="w-full h-20" />}>
+        <Header
+          className="border-b border-gray-500"
+          hasCheckout={true}
+          hasCart={false}
+        />
+      </Suspense>
       <Container>{children}</Container>
     </main>
   );

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { PropsWithChildren, ReactNode } from "react";
+import { ReactNode } from "react";
 
 export function Container({
   children,
@@ -8,5 +8,7 @@ export function Container({
   className?: string;
   children: ReactNode;
 }) {
-  return <div className={cn("mx-auto max-w-7xl", className)}>{children}</div>;
+  return (
+    <div className={cn("mx-auto max-w-7xl px-4", className)}>{children}</div>
+  );
 }
