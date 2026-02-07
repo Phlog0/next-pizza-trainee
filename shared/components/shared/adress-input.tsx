@@ -17,7 +17,7 @@ export function AdressInput({
   required,
 }: {
   onChange: (
-    value: DaDataSuggestion<DaDataAddress>["value"] | undefined
+    value: DaDataSuggestion<DaDataAddress>["value"] | undefined,
   ) => void;
   name: "adress";
   label: string;
@@ -30,6 +30,7 @@ export function AdressInput({
 
   const {
     formState: { errors },
+
     watch,
     setValue,
   } = useFormContext();
